@@ -1,0 +1,29 @@
+{
+  "name": "dsh-mcp-tool-schema-fix",
+  "version": "1.0.0",
+  "description": "DSH bundle: keep MCP tool parameter names visible in PTC mode by normalizing input schemas the Harness JSON-Schema subset rejects (nullable type arrays, anyOf, ...)",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "files": [
+    "index.js",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": ["dsh", "deepseek-harness", "cordis", "mcp", "ptc"],
+  "license": "MIT"
+}

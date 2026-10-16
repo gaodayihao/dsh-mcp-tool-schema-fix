@@ -1,0 +1,5 @@
+# dsh-mcp-tool-schema-fix 的 bundle patch：插入插件行本身。
+# 行名是包名（bare specifier），由 profile 的 node_modules 解析 —— 与官方 mcp 模板同形。
+- insert:
+    - id: mcp-tool-schema-fix
+      name: dsh-mcp-tool-schema-fix

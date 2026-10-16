@@ -1,0 +1,7057 @@
+{
+ "capturedAt": "2026-10-16",
+ "note": "真实抓取的三台 MCP 服务器工具入参 schema，用作 normalizeSchema 的回归夹具",
+ "endpoints": [
+  {
+   "server": "vs-mcp-ursa",
+   "url": "http://localhost:3001/SDK/"
+  },
+  {
+   "server": "ida",
+   "url": "http://127.0.0.1:13337/mcp"
+  },
+  {
+   "server": "wzimg",
+   "url": "http://127.0.0.1:13339/"
+  }
+ ],
+ "tools": [
+  {
+   "server": "vs-mcp-ursa",
+   "name": "ExecuteAsyncTest",
+   "description": "Execute asynchronous test operations for long-running test suites",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "operation": {
+      "description": "Operation to perform: 'start', 'status', or 'stop'",
+      "type": "string"
+     },
+     "projectName": {
+      "description": "Target project name or path (required for 'start' operation)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "filter": {
+      "description": "Test filter expression (e.g. 'FullyQualifiedName=MyNamespace.MyClass.MyMethod')",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "verbose": {
+      "description": "Include verbose output (used with 'start')",
+      "type": "boolean",
+      "default": false
+     },
+     "pathFormat": {
+      "description": "Path format for file paths in output ('Windows' or 'WSL'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     }
+    },
+    "required": [
+     "operation"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "TranslatePath",
+   "description": "Translate a path between Windows and WSL formats",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "path": {
+      "description": "The path to translate",
+      "type": "string"
+     },
+     "sourceFormat": {
+      "description": "Source format: 'Windows', 'WSL', or 'URI'",
+      "type": "string"
+     },
+     "targetFormat": {
+      "description": "Target format: 'Windows', 'WSL', or 'URI'",
+      "type": "string"
+     }
+    },
+    "required": [
+     "path",
+     "sourceFormat",
+     "targetFormat"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "GetSymbolAtLocation",
+   "description": "Get symbol information at a specific location in a file",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "filePath": {
+      "description": "File path (any format - Windows, WSL, URI)",
+      "type": "string"
+     },
+     "line": {
+      "description": "Line number (1-based)",
+      "type": "integer"
+     },
+     "column": {
+      "description": "Column number (1-based)",
+      "type": "integer"
+     },
+     "pathFormat": {
+      "description": "Optional: Path format ('Windows', 'WSL', 'URI'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     }
+    },
+    "required": [
+     "filePath",
+     "line",
+     "column"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "GetMethodCallers",
+   "description": "Get methods that call this method",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "methodName": {
+      "description": "Method name",
+      "type": "string"
+     },
+     "containingType": {
+      "description": "Type containing the method",
+      "type": "string"
+     },
+     "pathFormat": {
+      "description": "Optional: Path format ('Windows', 'WSL', 'URI'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     }
+    },
+    "required": [
+     "methodName",
+     "containingType"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "GetMethodCalls",
+   "description": "Get methods that this method calls",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "methodName": {
+      "description": "Method name",
+      "type": "string"
+     },
+     "containingType": {
+      "description": "Type containing the method",
+      "type": "string"
+     },
+     "pathFormat": {
+      "description": "Optional: Path format ('Windows', 'WSL', 'URI'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     }
+    },
+    "required": [
+     "methodName",
+     "containingType"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "BreakpointList",
+   "description": "List all breakpoints in the current solution. Works in any debugger mode. Shows file, line, enabled state, and conditions.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pathFormat": {
+      "description": "Path format for output ('Windows' or 'WSL'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     },
+     "limit": {
+      "description": "Maximum results to return (default 50)",
+      "type": "integer",
+      "default": 50
+     },
+     "offset": {
+      "description": "Number of results to skip (default 0)",
+      "type": "integer",
+      "default": 0
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "LoadSolution",
+   "description": "Opens a solution file in Visual Studio. The MCP server stays running on the current port.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "solutionPath": {
+      "description": "Full path to the .sln file (Windows or WSL format)",
+      "type": "string"
+     }
+    },
+    "required": [
+     "solutionPath"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "GetLoggingStatus",
+   "description": "Get current logging configuration and log file location",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "DebugEvaluate",
+   "description": "Evaluate an expression in the current debug context (read-only). Requires Break mode. Searches across threads if current frame cannot evaluate. Use immediate_execute instead if you need to modify values.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "expression": {
+      "description": "Expression to evaluate, e.g. 'myVar', 'myList.Count', 'obj.Property.SubProp'",
+      "type": "string"
+     }
+    },
+    "required": [
+     "expression"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "BreakpointSet",
+   "description": "Set a breakpoint at a specific file+line or on a function name. Works in any debugger mode (Design, Running, Break). Set breakpoints before calling debug_start to pause at specific code locations.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "file": {
+      "description": "Source file path (any format - Windows or WSL)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "line": {
+      "description": "Line number in the source file (required when file is specified)",
+      "type": [
+       "integer",
+       "null"
+      ],
+      "default": null
+     },
+     "functionName": {
+      "description": "Function name for function breakpoint, e.g. 'MyClass.MyMethod'",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "condition": {
+      "description": "Break condition expression, e.g. 'x > 10'",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "hitCount": {
+      "description": "Hit count threshold before breaking",
+      "type": [
+       "integer",
+       "null"
+      ],
+      "default": null
+     },
+     "hitCountType": {
+      "description": "Hit count type: 'equal', 'greater', 'multiple'",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "pathFormat": {
+      "description": "Path format for output ('Windows' or 'WSL'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "FindSymbolUsages",
+   "description": "Find where a symbol is used throughout the solution",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "symbolName": {
+      "description": "Symbol name to find usages for",
+      "type": "string"
+     },
+     "definitionFilePath": {
+      "description": "Optional: File path where the symbol is defined (any format)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "pathFormat": {
+      "description": "Optional: Path format ('Windows', 'WSL', 'URI'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     },
+     "limit": {
+      "description": "Maximum results to return (default 50)",
+      "type": "integer",
+      "default": 50
+     },
+     "offset": {
+      "description": "Number of results to skip (default 0)",
+      "type": "integer",
+      "default": 0
+     }
+    },
+    "required": [
+     "symbolName"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "DebugStart",
+   "description": "Start debugging the startup project (F5). Returns immediately - does NOT wait for the app to launch. Poll debug_get_mode to check when the app is Running or hits a breakpoint (Break). Requires Design mode (no active debug session). Returns error if already running.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "DebugStep",
+   "description": "Step through code. Direction: 'over' (step over), 'into' (step into), or 'out' (step out). Requires Break mode. After stepping, inspect state with debug_get_locals/debug_evaluate. Returns error if not in Break mode or if direction is invalid.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "direction": {
+      "description": "Step direction: 'over', 'into', or 'out'",
+      "type": "string"
+     },
+     "pathFormat": {
+      "description": "Path format for file paths in output ('Windows' or 'WSL'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     }
+    },
+    "required": [
+     "direction"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "FormatDocument",
+   "description": "Format a document using Visual Studio formatting settings. Applies changes directly to the file.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "filePath": {
+      "description": "File path to format (any format - Windows, WSL, URI)",
+      "type": "string"
+     },
+     "startLine": {
+      "description": "Optional: Start line for partial formatting (1-based)",
+      "type": [
+       "integer",
+       "null"
+      ],
+      "default": null
+     },
+     "endLine": {
+      "description": "Optional: End line for partial formatting (1-based)",
+      "type": [
+       "integer",
+       "null"
+      ],
+      "default": null
+     },
+     "pathFormat": {
+      "description": "Optional: Path format for output ('Windows', 'WSL', 'URI'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     }
+    },
+    "required": [
+     "filePath"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "GetProjectReferences",
+   "description": "Get all references for a specific project",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "projectPath": {
+      "description": "Project identifier - can be project name, relative path, or full path",
+      "type": "string"
+     },
+     "pathFormat": {
+      "description": "Optional: Path format for input ('Windows' or 'WSL'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     }
+    },
+    "required": [
+     "projectPath"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "DebugContinue",
+   "description": "Resume execution after a breakpoint or break. Requires Break mode. Poll debug_get_mode after calling to detect the next breakpoint hit or app exit.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "ErrorListGet",
+   "description": "Get items from the VS Error List (errors, warnings, messages). Works in any debugger mode. Filter by severity: 'error', 'warning', 'message', or 'all'.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "severity": {
+      "description": "Filter by severity: 'error', 'warning', 'message', or 'all' (default)",
+      "type": "string",
+      "default": "all"
+     },
+     "pathFormat": {
+      "description": "Path format for output ('Windows' or 'WSL'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     },
+     "limit": {
+      "description": "Maximum results to return (default 50)",
+      "type": "integer",
+      "default": 50
+     },
+     "offset": {
+      "description": "Number of results to skip (default 0)",
+      "type": "integer",
+      "default": 0
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "ImmediateExecute",
+   "description": "Execute an expression with side effects in the Immediate Window. Requires Break mode. Can modify variables at runtime (e.g. 'myVar = 42'). Returns error if not in Break mode.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "expression": {
+      "description": "Expression to execute, e.g. 'myVar = 42' or 'list.Clear()'",
+      "type": "string"
+     },
+     "timeout": {
+      "description": "Timeout in milliseconds (default 5000)",
+      "type": "integer",
+      "default": 5000
+     }
+    },
+    "required": [
+     "expression"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "FindSymbols",
+   "description": "Find symbols by name in the solution",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "symbolName": {
+      "description": "Symbol name to search for",
+      "type": "string"
+     },
+     "symbolKind": {
+      "description": "Optional: Symbol kinds to search ('Method', 'Property', 'Class', 'Interface', 'Namespace', etc.)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "pathFormat": {
+      "description": "Optional: Path format ('Windows', 'WSL', 'URI'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     },
+     "limit": {
+      "description": "Maximum results to return (default 50)",
+      "type": "integer",
+      "default": 50
+     },
+     "offset": {
+      "description": "Number of results to skip (default 0)",
+      "type": "integer",
+      "default": 0
+     }
+    },
+    "required": [
+     "symbolName"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "DebugListTransports",
+   "description": "List available debug transports (e.g. Default, Docker, WSL) with their debug engines. Each transport lists its available engines (e.g. 'Managed (.NET Core for Unix)' for Docker). Use the exact engine name from this list as the engineType parameter in debug_attach.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "GetDiagnostics",
+   "description": "Get compiler diagnostics (errors, warnings, info) for a file or project without running a full build. Uses Roslyn background compilation — no build required. Note: if files were edited externally (e.g. by a CLI agent like Claude Code), diagnostics may be stale until VS reloads the files. For accurate results, use IDE agents (Cursor, Copilot, Cline) that edit files inside VS, or call error_list_get which reads the VS Error List window.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "filePath": {
+      "description": "Optional: File path to get diagnostics for (any format - Windows, WSL, URI)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "projectName": {
+      "description": "Optional: Project name to get diagnostics for",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "severity": {
+      "description": "Optional: Filter by severity ('Error', 'Warning', 'Info')",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "pathFormat": {
+      "description": "Optional: Path format for output ('Windows', 'WSL', 'URI'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     },
+     "limit": {
+      "description": "Maximum results to return (default 50)",
+      "type": "integer",
+      "default": 50
+     },
+     "offset": {
+      "description": "Number of results to skip (default 0)",
+      "type": "integer",
+      "default": 0
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "ExecuteCommand",
+   "description": "Execute build or clean commands. Build works on solution or specific project. Clean always operates on the entire solution (per-project clean is not supported by VS DTE API)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "command": {
+      "description": "Command to execute: 'build' or 'clean'. Use ExecuteAsyncTest for tests",
+      "type": "string"
+     },
+     "what": {
+      "description": "Target project - accepts: project name (e.g. 'Msvc.Info.Core'), Windows path, or WSL path. Empty/null for entire solution. Ignored for 'clean' command",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "verbose": {
+      "description": "Include detailed debug output in the response",
+      "type": "boolean",
+      "default": false
+     },
+     "outputFormat": {
+      "description": "Output format: 'full' or 'compact' (default, filtered diagnostics)",
+      "type": "string",
+      "default": "compact"
+     },
+     "pathFormat": {
+      "description": "Path format for file paths in output ('Windows' or 'WSL'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     }
+    },
+    "required": [
+     "command"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "GetDocumentOutline",
+   "description": "Get the outline of a document (classes, methods, properties, etc.)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "filePath": {
+      "description": "File path (any format - Windows, WSL, URI)",
+      "type": "string"
+     },
+     "pathFormat": {
+      "description": "Optional: Path format ('Windows', 'WSL', 'URI'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     },
+     "minAccessLevel": {
+      "description": "Minimum access level: 'public', 'protected', 'internal', 'private'",
+      "type": "string",
+      "default": "private"
+     },
+     "includeTypes": {
+      "description": "Include member types: 'all', 'methods', 'properties', 'fields'",
+      "type": "string",
+      "default": "all"
+     }
+    },
+    "required": [
+     "filePath"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "FindSymbolDefinition",
+   "description": "Find where a symbol is defined",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "symbolName": {
+      "description": "Symbol name to find the definition for",
+      "type": "string"
+     },
+     "fromFilePath": {
+      "description": "Optional: File path where the symbol is referenced (any format)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "pathFormat": {
+      "description": "Optional: Path format ('Windows', 'WSL', 'URI'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     }
+    },
+    "required": [
+     "symbolName"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "DebugGetCallstack",
+   "description": "Get the current call stack of the active thread. Requires Break mode (debugger paused at breakpoint). Returns error if debugger is Running - poll debug_get_mode first to wait for Break.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pathFormat": {
+      "description": "Path format for file paths in output ('Windows' or 'WSL'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "RenameSymbol",
+   "description": "Rename a symbol (variable, method, class, property, etc.) across the entire solution. VS handles all references automatically.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "symbolName": {
+      "description": "Current name of the symbol to rename",
+      "type": "string"
+     },
+     "newName": {
+      "description": "New name for the symbol",
+      "type": "string"
+     },
+     "filePath": {
+      "description": "Optional: File path to narrow the search scope (any format - Windows, WSL, URI)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "line": {
+      "description": "Optional: Line number (1-based) for exact symbol location",
+      "type": [
+       "integer",
+       "null"
+      ],
+      "default": null
+     },
+     "column": {
+      "description": "Optional: Column number (1-based) for exact symbol location",
+      "type": [
+       "integer",
+       "null"
+      ],
+      "default": null
+     },
+     "symbolKind": {
+      "description": "Optional: Symbol kind filter ('Method', 'Property', 'Class', 'Field', 'Parameter', 'Local')",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "pathFormat": {
+      "description": "Optional: Path format for output ('Windows', 'WSL', 'URI'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     }
+    },
+    "required": [
+     "symbolName",
+     "newName"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "DebugStop",
+   "description": "Stop the current debug session. Works in Running or Break mode. After stopping, debug_get_mode returns 'Design'.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "SetLogLevel",
+   "description": "Change the global log level for Serilog (affects file logging). Levels: Verbose, Debug, Information, Warning, Error, Fatal",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "logLevel": {
+      "description": "Log level to set: Verbose, Debug, Information, Warning, Error, Fatal",
+      "type": "string"
+     }
+    },
+    "required": [
+     "logLevel"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "DebugListProcesses",
+   "description": "List processes available for debug attachment. Use transport 'local' (default) for local processes, 'Docker (Linux Container)' for Docker, 'WSL' for WSL. Call debug_list_transports first to see available transports. For Docker, pass the container name/ID as qualifier.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "transport": {
+      "description": "Transport name: 'local' (default), 'Docker (Linux Container)', 'WSL', etc.",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "qualifier": {
+      "description": "Transport qualifier: container name for Docker, empty for local/WSL",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     },
+     "limit": {
+      "description": "Maximum results to return (default 100)",
+      "type": "integer",
+      "default": 100
+     },
+     "offset": {
+      "description": "Number of results to skip (default 0)",
+      "type": "integer",
+      "default": 0
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "GetSelection",
+   "description": "Get the current text selection in the active editor",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pathFormat": {
+      "description": "Path format for file path in response ('Windows' or 'WSL'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "ExceptionSettingsSet",
+   "description": "Configure break-on-exception for a specific exception type. Works in any debugger mode. Example: exception_settings_set 'System.NullReferenceException' true. Group defaults to 'Common Language Runtime Exceptions' if not specified.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "exceptionName": {
+      "description": "Full exception type name, e.g. 'System.NullReferenceException'",
+      "type": "string"
+     },
+     "breakWhenThrown": {
+      "description": "True to break when exception is thrown, false to only break when unhandled",
+      "type": "boolean"
+     },
+     "group": {
+      "description": "Exception group name (default: 'Common Language Runtime Exceptions')",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     }
+    },
+    "required": [
+     "exceptionName",
+     "breakWhenThrown"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "DebugAttach",
+   "description": "Attach the debugger to a running process. The most common AI debugging workflow: the process is already running, VS has the source code, attach and investigate. Works with local processes, Docker containers, and WSL. Specify processName (partial match) or processId. IMPORTANT for Docker/WSL: You MUST specify engineType='CoreCLR' for .NET Core apps in containers. Without engineType, attach to remote processes will silently fail. For local .NET Framework apps, use engineType='Managed'. For local .NET Core, 'CoreCLR' also works. After attaching, use debug_break to pause, or set breakpoints first and wait for them to hit. Requires Design mode (no active debug session).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "processName": {
+      "description": "Process name to attach to (partial match, e.g. 'MyApp' matches 'MyApp.exe')",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "processId": {
+      "description": "Process ID to attach to (exact match)",
+      "type": [
+       "integer",
+       "null"
+      ],
+      "default": null
+     },
+     "transport": {
+      "description": "Transport: 'local' (default), 'Docker (Linux Container)', 'WSL'",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "qualifier": {
+      "description": "Transport qualifier: container name for Docker, empty for local/WSL",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "engineType": {
+      "description": "Debug engine type. REQUIRED for Docker/WSL: 'CoreCLR' (.NET Core/5+), 'Managed' (.NET Framework). Leave empty for local processes (auto-detect). Use debug_list_transports to see available engines per transport.",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "GetInheritance",
+   "description": "Get inheritance hierarchy for a type (base types, derived types, and interfaces)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "typeName": {
+      "description": "Type name",
+      "type": "string"
+     },
+     "namespaceName": {
+      "description": "Optional: Namespace for disambiguation",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "pathFormat": {
+      "description": "Optional: Path format ('Windows', 'WSL', 'URI'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     }
+    },
+    "required": [
+     "typeName"
+    ]
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "DebugGetLocals",
+   "description": "Get local variables in the current stack frame. Requires Break mode. Auto-navigates to managed (.NET) frame if stopped in native code. Returns error if debugger is Running.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "outputFormat": {
+      "description": "Output format: 'verbose' or 'compact' (default)",
+      "type": "string",
+      "default": "compact"
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "GetSolutionTree",
+   "description": "Get the solution tree structure. Without projectName shows solution overview, with projectName shows project files",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "projectName": {
+      "description": "Optional: Project name to get detailed file list for",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "pathFormat": {
+      "description": "Optional: Path format for output ('Windows' or 'WSL'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     },
+     "useRelativePaths": {
+      "description": "Use relative paths from solution root. Default is true",
+      "type": "boolean",
+      "default": true
+     },
+     "limit": {
+      "description": "Maximum files to return (default 100, only applies when projectName is specified)",
+      "type": "integer",
+      "default": 100
+     },
+     "offset": {
+      "description": "Number of files to skip (default 0)",
+      "type": "integer",
+      "default": 0
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "CheckSelection",
+   "description": "Check if there is an active text selection in the editor",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "DebugBreak",
+   "description": "Pause the running application. Requires Running mode. After breaking, use debug_get_callstack and debug_get_locals to inspect state. Returns error if debugger is not in Running mode.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "GetActiveFile",
+   "description": "Get the currently active file path and cursor position in the editor",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pathFormat": {
+      "description": "Path format for output ('Windows' or 'WSL'). Default is 'WSL'",
+      "type": "string",
+      "default": "WSL"
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "OutputRead",
+   "description": "Read content from a VS Output window pane (e.g. 'Build', 'Debug', 'General'). Works in any debugger mode. Pass no pane name (null) to list available panes. Use tailLines to limit output (default 200 lines).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "paneName": {
+      "description": "Output pane name, e.g. 'Build', 'Debug'. Pass null to list available panes.",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "tailLines": {
+      "description": "Number of tail lines to return (default 200)",
+      "type": "integer",
+      "default": 200
+     }
+    }
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "DebugGetMode",
+   "description": "Get the current debugger state: 'Design' (no session), 'Running' (app executing), 'Break' (paused at breakpoint/exception). Use this to poll for state changes after debug_start or to detect breakpoint hits. This is the core polling tool for the debugging workflow.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "vs-mcp-ursa",
+   "name": "BreakpointRemove",
+   "description": "Remove a breakpoint at a specific file and line. Works in any debugger mode. Use breakpoint_list to see current breakpoints.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "file": {
+      "description": "Source file path (any format - Windows or WSL)",
+      "type": "string"
+     },
+     "line": {
+      "description": "Line number",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "file",
+     "line"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "server_health",
+   "description": "Health/ready probe for MCP server and current IDB state.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {},
+    "required": []
+   }
+  },
+  {
+   "server": "ida",
+   "name": "lookup_funcs",
+   "description": "Get functions by address or name (auto-detects)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Address(es) or name(s)"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "int_convert",
+   "description": "Convert numbers to different formats",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "inputs": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "text": {
+           "type": "string",
+           "description": "Number string to convert"
+          },
+          "size": {
+           "type": "integer",
+           "description": "Byte size for conversion (omit for auto)"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "text": {
+          "type": "string",
+          "description": "Number string to convert"
+         },
+         "size": {
+          "type": "integer",
+          "description": "Byte size for conversion (omit for auto)"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Convert numbers to various formats (hex, decimal, binary, ascii)"
+     }
+    },
+    "required": [
+     "inputs"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "list_funcs",
+   "description": "List functions with optional filtering and offset/count pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "filter": {
+           "type": "string",
+           "description": "Glob filter"
+          },
+          "offset": {
+           "type": "integer",
+           "description": "Start index"
+          },
+          "count": {
+           "type": "integer",
+           "description": "Max results (0=all)"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "filter": {
+          "type": "string",
+          "description": "Glob filter"
+         },
+         "offset": {
+          "type": "integer",
+          "description": "Start index"
+         },
+         "count": {
+          "type": "integer",
+          "description": "Max results (0=all)"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ],
+      "description": "List functions with optional filtering and pagination"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "func_query",
+   "description": "Query functions with richer filtering than list_funcs.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "filter": {
+           "type": "string",
+           "description": "Name glob/regex"
+          },
+          "name_regex": {
+           "type": "string",
+           "description": "Name regex"
+          },
+          "min_size": {
+           "type": "integer",
+           "description": "Min size in bytes"
+          },
+          "max_size": {
+           "type": "integer",
+           "description": "Max size in bytes"
+          },
+          "has_type": {
+           "type": "boolean",
+           "description": "Require type info"
+          },
+          "offset": {
+           "type": "integer",
+           "description": "Start index"
+          },
+          "count": {
+           "type": "integer",
+           "description": "Max results (0=all)"
+          },
+          "sort_by": {
+           "type": "string",
+           "description": "Sort: addr|name|size"
+          },
+          "descending": {
+           "type": "boolean",
+           "description": "Descending"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "filter": {
+          "type": "string",
+          "description": "Name glob/regex"
+         },
+         "name_regex": {
+          "type": "string",
+          "description": "Name regex"
+         },
+         "min_size": {
+          "type": "integer",
+          "description": "Min size in bytes"
+         },
+         "max_size": {
+          "type": "integer",
+          "description": "Max size in bytes"
+         },
+         "has_type": {
+          "type": "boolean",
+          "description": "Require type info"
+         },
+         "offset": {
+          "type": "integer",
+          "description": "Start index"
+         },
+         "count": {
+          "type": "integer",
+          "description": "Max results (0=all)"
+         },
+         "sort_by": {
+          "type": "string",
+          "description": "Sort: addr|name|size"
+         },
+         "descending": {
+          "type": "boolean",
+          "description": "Descending"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Richer function query (size/type/name filters + pagination)"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "list_globals",
+   "description": "List globals with optional filtering and offset/count pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "filter": {
+           "type": "string",
+           "description": "Glob filter"
+          },
+          "offset": {
+           "type": "integer",
+           "description": "Start index"
+          },
+          "count": {
+           "type": "integer",
+           "description": "Max results (0=all)"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "filter": {
+          "type": "string",
+          "description": "Glob filter"
+         },
+         "offset": {
+          "type": "integer",
+          "description": "Start index"
+         },
+         "count": {
+          "type": "integer",
+          "description": "Max results (0=all)"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ],
+      "description": "List global variables with optional filtering and pagination"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "entity_query",
+   "description": "Query IDB entities with typed filters, projection, and pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "kind": {
+           "type": "string",
+           "description": "functions|globals|imports|strings|names"
+          },
+          "filter": {
+           "type": "string",
+           "description": "Glob/regex filter"
+          },
+          "regex": {
+           "type": "string",
+           "description": "Regex on primary text field"
+          },
+          "min_addr": {
+           "type": "string",
+           "description": "Min address bound"
+          },
+          "max_addr": {
+           "type": "string",
+           "description": "Max address bound"
+          },
+          "segment": {
+           "type": "string",
+           "description": "Segment filter"
+          },
+          "module": {
+           "type": "string",
+           "description": "Import module filter"
+          },
+          "offset": {
+           "type": "integer",
+           "description": "Start index"
+          },
+          "count": {
+           "type": "integer",
+           "description": "Max results (0=all)"
+          },
+          "sort_by": {
+           "type": "string",
+           "description": "Sort: addr|name|size|length"
+          },
+          "descending": {
+           "type": "boolean",
+           "description": "Descending"
+          },
+          "fields": {
+           "type": "array",
+           "items": {
+            "type": "string"
+           },
+           "description": "Projection field list"
+          }
+         },
+         "required": [
+          "kind"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "kind": {
+          "type": "string",
+          "description": "functions|globals|imports|strings|names"
+         },
+         "filter": {
+          "type": "string",
+          "description": "Glob/regex filter"
+         },
+         "regex": {
+          "type": "string",
+          "description": "Regex on primary text field"
+         },
+         "min_addr": {
+          "type": "string",
+          "description": "Min address bound"
+         },
+         "max_addr": {
+          "type": "string",
+          "description": "Max address bound"
+         },
+         "segment": {
+          "type": "string",
+          "description": "Segment filter"
+         },
+         "module": {
+          "type": "string",
+          "description": "Import module filter"
+         },
+         "offset": {
+          "type": "integer",
+          "description": "Start index"
+         },
+         "count": {
+          "type": "integer",
+          "description": "Max results (0=all)"
+         },
+         "sort_by": {
+          "type": "string",
+          "description": "Sort: addr|name|size|length"
+         },
+         "descending": {
+          "type": "boolean",
+          "description": "Descending"
+         },
+         "fields": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          },
+          "description": "Projection field list"
+         }
+        },
+        "required": [
+         "kind"
+        ],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Generic entity query with filtering, projection, and pagination"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "imports",
+   "description": "List imports with module names using offset/count pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "offset": {
+      "type": "integer",
+      "description": "Starting pagination index (default: 0)"
+     },
+     "count": {
+      "type": "integer",
+      "description": "Maximum rows (0 returns all imports)"
+     }
+    },
+    "required": [
+     "offset",
+     "count"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "imports_query",
+   "description": "Query imports with richer filtering than imports(offset,count).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "filter": {
+           "type": "string",
+           "description": "Name glob/regex"
+          },
+          "module": {
+           "type": "string",
+           "description": "Module glob/regex"
+          },
+          "offset": {
+           "type": "integer",
+           "description": "Start index"
+          },
+          "count": {
+           "type": "integer",
+           "description": "Max results (0=all)"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "filter": {
+          "type": "string",
+          "description": "Name glob/regex"
+         },
+         "module": {
+          "type": "string",
+          "description": "Module glob/regex"
+         },
+         "offset": {
+          "type": "integer",
+          "description": "Start index"
+         },
+         "count": {
+          "type": "integer",
+          "description": "Max results (0=all)"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Import query with import/module filters and pagination"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "idb_save",
+   "description": "Save active IDB to disk, optionally to a provided path.\n\nThe open database is backed by loose working files (.id0/.id1/.id2/.nam/.til)\nthat IDA actively manages, headless included. Killing them out from under the\nopen database corrupts it (issues #446, #498), so DBFL_KILL is never used\nhere: an in-place save uses IDA's native save (Ctrl+W), and an explicit\ndifferent destination gets a compressed copy while the working files stay.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "path": {
+      "type": "string",
+      "description": "Optional destination path (default: current IDB path)",
+      "default": ""
+     }
+    },
+    "required": []
+   }
+  },
+  {
+   "server": "ida",
+   "name": "find_regex",
+   "description": "Search strings by case-insensitive regex with offset/limit pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pattern": {
+      "type": "string",
+      "description": "Regex pattern to search for in strings"
+     },
+     "limit": {
+      "type": "integer",
+      "description": "Max matches (default: 30, max: 500)",
+      "default": 30
+     },
+     "offset": {
+      "type": "integer",
+      "description": "Skip first N matches (default: 0)",
+      "default": 0
+     }
+    },
+    "required": [
+     "pattern"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "search_text",
+   "description": "Search the rendered listing for `pattern` over [start, end).\n\nIterates `idautils.Heads()` in pure Python and renders each via\n`ida_lines.generate_disassembly()`. Per-head iteration is cheap and\nyields between heads, so the per-tool deadline (sync_wrapper) and the\nUI Cancel button both interrupt the walk reliably — unlike the C-level\n`ida_search.find_text()` it replaced, which on huge .text segments\ncould run for minutes without polling `user_cancelled()`.\n\nUse `start`/`end` to scope the work for predictable performance on\nlarge binaries; without them the scan covers the whole image.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pattern": {
+      "type": "string",
+      "description": "Text to search for in the rendered listing (literal substring by default)"
+     },
+     "limit": {
+      "type": "integer",
+      "description": "Max hits per page (default: 30, max: 500)",
+      "default": 30
+     },
+     "start": {
+      "type": "string",
+      "description": "Lower bound (hex or symbol). Empty = first segment.",
+      "default": ""
+     },
+     "end": {
+      "type": "string",
+      "description": "Upper bound (hex or symbol, exclusive). Empty = last segment.",
+      "default": ""
+     },
+     "regex": {
+      "type": "boolean",
+      "description": "Treat pattern as a Python regex",
+      "default": false
+     },
+     "case_sensitive": {
+      "type": "boolean",
+      "description": "Case-sensitive match (default: false)",
+      "default": false
+     },
+     "include": {
+      "type": "string",
+      "description": "'disasm' | 'comments' | 'all' (default: all)",
+      "default": "all"
+     },
+     "code_only": {
+      "type": "boolean",
+      "description": "Restrict search to executable segments (default: true)",
+      "default": true
+     }
+    },
+    "required": [
+     "pattern"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "decompile",
+   "description": "Decompile function(s) at address(es); returns pseudocode and per-item errors.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addr": {
+      "type": "string",
+      "description": "Function address or name to decompile"
+     },
+     "include_addresses": {
+      "type": "boolean",
+      "description": "Append /*0xNNNN*/ markers per line (default: true). Set false to save tokens.",
+      "default": true
+     }
+    },
+    "required": [
+     "addr"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "disasm",
+   "description": "Disassemble function with offset/max_instructions pagination and optional total count.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addr": {
+      "type": "string",
+      "description": "Function address or name to disassemble"
+     },
+     "max_instructions": {
+      "type": "integer",
+      "description": "Max instructions per function (default: 5000, max: 50000)",
+      "default": 5000
+     },
+     "offset": {
+      "type": "integer",
+      "description": "Skip first N instructions (default: 0)",
+      "default": 0
+     },
+     "include_total": {
+      "type": "boolean",
+      "description": "Compute total instruction count (default: false)",
+      "default": false
+     }
+    },
+    "required": [
+     "addr"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "func_profile",
+   "description": "Profile functions with summary metrics and optional sampled details.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Function address or name (omit or '*' for all)"
+          },
+          "filter": {
+           "type": "string",
+           "description": "Name glob/regex"
+          },
+          "offset": {
+           "type": "integer",
+           "description": "Start index"
+          },
+          "count": {
+           "type": "integer",
+           "description": "Max results (0=all)"
+          },
+          "sort_by": {
+           "type": "string",
+           "description": "Sort: addr|name|size"
+          },
+          "descending": {
+           "type": "boolean",
+           "description": "Descending"
+          },
+          "include_lists": {
+           "type": "boolean",
+           "description": "Include callers/callees/strings/constants"
+          },
+          "max_items": {
+           "type": "integer",
+           "description": "Max items per list"
+          },
+          "include_prototype": {
+           "type": "boolean",
+           "description": "Include prototype"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Function address or name (omit or '*' for all)"
+         },
+         "filter": {
+          "type": "string",
+          "description": "Name glob/regex"
+         },
+         "offset": {
+          "type": "integer",
+          "description": "Start index"
+         },
+         "count": {
+          "type": "integer",
+          "description": "Max results (0=all)"
+         },
+         "sort_by": {
+          "type": "string",
+          "description": "Sort: addr|name|size"
+         },
+         "descending": {
+          "type": "boolean",
+          "description": "Descending"
+         },
+         "include_lists": {
+          "type": "boolean",
+          "description": "Include callers/callees/strings/constants"
+         },
+         "max_items": {
+          "type": "integer",
+          "description": "Max items per list"
+         },
+         "include_prototype": {
+          "type": "boolean",
+          "description": "Include prototype"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Function profiling query (supports name/address filters + pagination)"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "analyze_batch",
+   "description": "Run comprehensive analysis over one or more target functions.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Function address or name"
+          },
+          "include_decompile": {
+           "type": "boolean",
+           "description": "Include decompiler output"
+          },
+          "include_disasm": {
+           "type": "boolean",
+           "description": "Include disassembly"
+          },
+          "include_xrefs": {
+           "type": "boolean",
+           "description": "Include xrefs-to/from"
+          },
+          "include_callers": {
+           "type": "boolean",
+           "description": "Include callers"
+          },
+          "include_callees": {
+           "type": "boolean",
+           "description": "Include callees"
+          },
+          "include_strings": {
+           "type": "boolean",
+           "description": "Include strings"
+          },
+          "include_constants": {
+           "type": "boolean",
+           "description": "Include constants"
+          },
+          "include_basic_blocks": {
+           "type": "boolean",
+           "description": "Include basic blocks"
+          },
+          "include_proto": {
+           "type": "boolean",
+           "description": "Include prototype"
+          },
+          "max_disasm_insns": {
+           "type": "integer",
+           "description": "Max disasm instructions"
+          },
+          "max_callers": {
+           "type": "integer",
+           "description": "Max callers"
+          },
+          "max_callees": {
+           "type": "integer",
+           "description": "Max callees"
+          },
+          "max_strings": {
+           "type": "integer",
+           "description": "Max strings"
+          },
+          "max_constants": {
+           "type": "integer",
+           "description": "Max constants"
+          },
+          "max_blocks": {
+           "type": "integer",
+           "description": "Max blocks"
+          }
+         },
+         "required": [
+          "addr"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Function address or name"
+         },
+         "include_decompile": {
+          "type": "boolean",
+          "description": "Include decompiler output"
+         },
+         "include_disasm": {
+          "type": "boolean",
+          "description": "Include disassembly"
+         },
+         "include_xrefs": {
+          "type": "boolean",
+          "description": "Include xrefs-to/from"
+         },
+         "include_callers": {
+          "type": "boolean",
+          "description": "Include callers"
+         },
+         "include_callees": {
+          "type": "boolean",
+          "description": "Include callees"
+         },
+         "include_strings": {
+          "type": "boolean",
+          "description": "Include strings"
+         },
+         "include_constants": {
+          "type": "boolean",
+          "description": "Include constants"
+         },
+         "include_basic_blocks": {
+          "type": "boolean",
+          "description": "Include basic blocks"
+         },
+         "include_proto": {
+          "type": "boolean",
+          "description": "Include prototype"
+         },
+         "max_disasm_insns": {
+          "type": "integer",
+          "description": "Max disasm instructions"
+         },
+         "max_callers": {
+          "type": "integer",
+          "description": "Max callers"
+         },
+         "max_callees": {
+          "type": "integer",
+          "description": "Max callees"
+         },
+         "max_strings": {
+          "type": "integer",
+          "description": "Max strings"
+         },
+         "max_constants": {
+          "type": "integer",
+          "description": "Max constants"
+         },
+         "max_blocks": {
+          "type": "integer",
+          "description": "Max blocks"
+         }
+        },
+        "required": [
+         "addr"
+        ],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Comprehensive per-function analysis with selectable sections"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "xrefs_to",
+   "description": "Return xrefs to address(es) or named symbols, capped per target with truncation flag.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addrs": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Addresses or function names to find cross-references to (e.g. '0x11a9', 'check_pw', 'main')"
+     },
+     "limit": {
+      "type": "integer",
+      "description": "Max xrefs per address (default: 100, max: 1000)",
+      "default": 100
+     }
+    },
+    "required": [
+     "addrs"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "xref_query",
+   "description": "Query xrefs with direction/type filters and pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address or name"
+          },
+          "direction": {
+           "type": "string",
+           "description": "to|from|both (default: both)"
+          },
+          "xref_type": {
+           "type": "string",
+           "description": "any|code|data (default: any)"
+          },
+          "offset": {
+           "type": "integer",
+           "description": "Start index (default: 0)"
+          },
+          "count": {
+           "type": "integer",
+           "description": "Max results (default: 200, max: 5000)"
+          },
+          "include_fn": {
+           "type": "boolean",
+           "description": "Include function metadata"
+          },
+          "dedup": {
+           "type": "boolean",
+           "description": "Deduplicate by addr/type"
+          },
+          "sort_by": {
+           "type": "string",
+           "description": "Sort: addr|type"
+          },
+          "descending": {
+           "type": "boolean",
+           "description": "Descending"
+          }
+         },
+         "required": [
+          "addr"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address or name"
+         },
+         "direction": {
+          "type": "string",
+          "description": "to|from|both (default: both)"
+         },
+         "xref_type": {
+          "type": "string",
+          "description": "any|code|data (default: any)"
+         },
+         "offset": {
+          "type": "integer",
+          "description": "Start index (default: 0)"
+         },
+         "count": {
+          "type": "integer",
+          "description": "Max results (default: 200, max: 5000)"
+         },
+         "include_fn": {
+          "type": "boolean",
+          "description": "Include function metadata"
+         },
+         "dedup": {
+          "type": "boolean",
+          "description": "Deduplicate by addr/type"
+         },
+         "sort_by": {
+          "type": "string",
+          "description": "Sort: addr|type"
+         },
+         "descending": {
+          "type": "boolean",
+          "description": "Descending"
+         }
+        },
+        "required": [
+         "addr"
+        ],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Generic xref query with direction/type filters and pagination"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "xrefs_to_field",
+   "description": "Get cross-references to structure fields",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "struct": {
+           "type": "string",
+           "description": "Structure name"
+          },
+          "field": {
+           "type": "string",
+           "description": "Field name"
+          }
+         },
+         "required": [
+          "struct",
+          "field"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "struct": {
+          "type": "string",
+          "description": "Structure name"
+         },
+         "field": {
+          "type": "string",
+          "description": "Field name"
+         }
+        },
+        "required": [
+         "struct",
+         "field"
+        ],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "callees",
+   "description": "Return unique callees per function, capped by limit.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addrs": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Function addresses or names to get callees for (e.g. '0x123e', 'main')"
+     },
+     "limit": {
+      "type": "integer",
+      "description": "Max callees per function (default: 200, max: 500)",
+      "default": 200
+     }
+    },
+    "required": [
+     "addrs"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "find_bytes",
+   "description": "Search byte patterns (supports ??) with offset/limit pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "patterns": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Byte patterns to search for (e.g. '48 8B ?? ??')"
+     },
+     "limit": {
+      "type": "integer",
+      "description": "Max matches per pattern (default: 1000, max: 10000)",
+      "default": 1000
+     },
+     "offset": {
+      "type": "integer",
+      "description": "Skip first N matches (default: 0)",
+      "default": 0
+     }
+    },
+    "required": [
+     "patterns"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "basic_blocks",
+   "description": "Return function CFG blocks with offset/max_blocks pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addrs": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Function addresses or names to get basic blocks for (e.g. '0x123e', 'main')"
+     },
+     "max_blocks": {
+      "type": "integer",
+      "description": "Max basic blocks per function (default: 1000, max: 10000)",
+      "default": 1000
+     },
+     "offset": {
+      "type": "integer",
+      "description": "Skip first N blocks (default: 0)",
+      "default": 0
+     }
+    },
+    "required": [
+     "addrs"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "find",
+   "description": "Search strings/immediates/refs for targets with offset/limit pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "type": {
+      "type": "string",
+      "description": "Search type: 'string', 'immediate', 'data_ref', or 'code_ref'"
+     },
+     "targets": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "anyOf": [
+          {
+           "type": "string"
+          },
+          {
+           "type": "integer"
+          }
+         ]
+        }
+       },
+       {
+        "type": "string"
+       },
+       {
+        "type": "integer"
+       }
+      ],
+      "description": "Search targets (strings, integers, or addresses)"
+     },
+     "limit": {
+      "type": "integer",
+      "description": "Max matches per target (default: 1000, max: 10000)",
+      "default": 1000
+     },
+     "offset": {
+      "type": "integer",
+      "description": "Skip first N matches (default: 0)",
+      "default": 0
+     }
+    },
+    "required": [
+     "type",
+     "targets"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "insn_query",
+   "description": "Query instructions with mnemonic/operand filters and scoped scans.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "mnem": {
+           "type": "string",
+           "description": "Mnemonic to match"
+          },
+          "op0": {
+           "type": "integer",
+           "description": "Match first operand"
+          },
+          "op1": {
+           "type": "integer",
+           "description": "Match second operand"
+          },
+          "op2": {
+           "type": "integer",
+           "description": "Match third operand"
+          },
+          "op_any": {
+           "type": "integer",
+           "description": "Match any operand"
+          },
+          "func": {
+           "type": "string",
+           "description": "Scope: function address"
+          },
+          "segment": {
+           "type": "string",
+           "description": "Scope: segment name"
+          },
+          "start": {
+           "type": "string",
+           "description": "Scope: start address"
+          },
+          "end": {
+           "type": "string",
+           "description": "Scope: end address (exclusive)"
+          },
+          "offset": {
+           "type": "integer",
+           "description": "Start index"
+          },
+          "count": {
+           "type": "integer",
+           "description": "Max matches (max: 5000)"
+          },
+          "max_scan_insns": {
+           "type": "integer",
+           "description": "Max instructions to scan"
+          },
+          "include_fn": {
+           "type": "boolean",
+           "description": "Include function metadata"
+          },
+          "include_disasm": {
+           "type": "boolean",
+           "description": "Include disassembly text"
+          },
+          "allow_broad": {
+           "type": "boolean",
+           "description": "Allow scopeless scan"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "mnem": {
+          "type": "string",
+          "description": "Mnemonic to match"
+         },
+         "op0": {
+          "type": "integer",
+          "description": "Match first operand"
+         },
+         "op1": {
+          "type": "integer",
+          "description": "Match second operand"
+         },
+         "op2": {
+          "type": "integer",
+          "description": "Match third operand"
+         },
+         "op_any": {
+          "type": "integer",
+          "description": "Match any operand"
+         },
+         "func": {
+          "type": "string",
+          "description": "Scope: function address"
+         },
+         "segment": {
+          "type": "string",
+          "description": "Scope: segment name"
+         },
+         "start": {
+          "type": "string",
+          "description": "Scope: start address"
+         },
+         "end": {
+          "type": "string",
+          "description": "Scope: end address (exclusive)"
+         },
+         "offset": {
+          "type": "integer",
+          "description": "Start index"
+         },
+         "count": {
+          "type": "integer",
+          "description": "Max matches (max: 5000)"
+         },
+         "max_scan_insns": {
+          "type": "integer",
+          "description": "Max instructions to scan"
+         },
+         "include_fn": {
+          "type": "boolean",
+          "description": "Include function metadata"
+         },
+         "include_disasm": {
+          "type": "boolean",
+          "description": "Include disassembly text"
+         },
+         "allow_broad": {
+          "type": "boolean",
+          "description": "Allow scopeless scan"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Instruction query with mnemonic/operand filters and scoped scan"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "export_funcs",
+   "description": "Export function data for addresses in json/c_header/prototypes formats.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addrs": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Function addresses or names to export (e.g. '0x123e', 'main')"
+     },
+     "format": {
+      "type": "string",
+      "description": "Export format: json (default), c_header, or prototypes",
+      "default": "json"
+     }
+    },
+    "required": [
+     "addrs"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "callgraph",
+   "description": "Build bounded callgraph from roots with depth/node/edge limits.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "roots": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Root function addresses to start call graph traversal from"
+     },
+     "max_depth": {
+      "type": "integer",
+      "description": "Maximum depth for call graph traversal",
+      "default": 5
+     },
+     "max_nodes": {
+      "type": "integer",
+      "description": "Max nodes across the graph (default: 1000, max: 100000)",
+      "default": 1000
+     },
+     "max_edges": {
+      "type": "integer",
+      "description": "Max edges across the graph (default: 5000, max: 200000)",
+      "default": 5000
+     },
+     "max_edges_per_func": {
+      "type": "integer",
+      "description": "Max edges per function (default: 200, max: 5000)",
+      "default": 200
+     }
+    },
+    "required": [
+     "roots"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "get_bytes",
+   "description": "Read bytes from memory addresses",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "regions": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address to read from (hex or decimal)"
+          },
+          "size": {
+           "type": "integer",
+           "description": "Number of bytes to read"
+          }
+         },
+         "required": [
+          "addr",
+          "size"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address to read from (hex or decimal)"
+         },
+         "size": {
+          "type": "integer",
+          "description": "Number of bytes to read"
+         }
+        },
+        "required": [
+         "addr",
+         "size"
+        ],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "regions"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "get_int",
+   "description": "Read integer values from memory addresses",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address to read from (hex or decimal)"
+          },
+          "ty": {
+           "type": "string",
+           "description": "Integer class (i8/u64/i16le/i16be/etc)"
+          }
+         },
+         "required": [
+          "addr",
+          "ty"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address to read from (hex or decimal)"
+         },
+         "ty": {
+          "type": "string",
+          "description": "Integer class (i8/u64/i16le/i16be/etc)"
+         }
+        },
+        "required": [
+         "addr",
+         "ty"
+        ],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Integer read requests (ty, addr). ty: i8/u64/i16le/i16be/etc"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "get_string",
+   "description": "Read strings from memory addresses",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addrs": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Addresses to read strings from"
+     }
+    },
+    "required": [
+     "addrs"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "get_global_value",
+   "description": "Read global variable values by address or symbol name.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Global variable addresses or names to read values from"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "patch",
+   "description": "Patch bytes at memory addresses with hex data",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "patches": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address to patch (hex or decimal)"
+          },
+          "data": {
+           "type": "string",
+           "description": "Hex data to write (space-separated bytes)"
+          }
+         },
+         "required": [
+          "addr",
+          "data"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address to patch (hex or decimal)"
+         },
+         "data": {
+          "type": "string",
+          "description": "Hex data to write (space-separated bytes)"
+         }
+        },
+        "required": [
+         "addr",
+         "data"
+        ],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "patches"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "put_int",
+   "description": "Write integer values to memory addresses",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address to write to (hex or decimal)"
+          },
+          "ty": {
+           "type": "string",
+           "description": "Integer class (i8/u64/i16le/i16be/etc)"
+          },
+          "value": {
+           "type": "string",
+           "description": "Integer value as string (decimal or 0x..; negatives allowed for signed)"
+          }
+         },
+         "required": [
+          "addr",
+          "ty",
+          "value"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address to write to (hex or decimal)"
+         },
+         "ty": {
+          "type": "string",
+          "description": "Integer class (i8/u64/i16le/i16be/etc)"
+         },
+         "value": {
+          "type": "string",
+          "description": "Integer value as string (decimal or 0x..; negatives allowed for signed)"
+         }
+        },
+        "required": [
+         "addr",
+         "ty",
+         "value"
+        ],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Integer write requests (ty, addr, value). value is a string; supports 0x.. and negatives"
+     }
+    },
+    "required": [
+     "items"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "declare_type",
+   "description": "Declare C type definitions in local type library.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "decls": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "C type declarations"
+     }
+    },
+    "required": [
+     "decls"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "enum_upsert",
+   "description": "Create or extend local enums in an idempotent way.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "name": {
+           "type": "string",
+           "description": "Enum type name"
+          },
+          "members": {
+           "anyOf": [
+            {
+             "type": "array",
+             "items": {
+              "type": "object",
+              "properties": {
+               "name": {
+                "type": "string",
+                "description": "Enum member name"
+               },
+               "value": {
+                "anyOf": [
+                 {
+                  "type": "integer"
+                 },
+                 {
+                  "type": "string"
+                 }
+                ],
+                "description": "Enum member value"
+               }
+              },
+              "required": [],
+              "additionalProperties": false
+             }
+            },
+            {
+             "type": "object",
+             "properties": {
+              "name": {
+               "type": "string",
+               "description": "Enum member name"
+              },
+              "value": {
+               "anyOf": [
+                {
+                 "type": "integer"
+                },
+                {
+                 "type": "string"
+                }
+               ],
+               "description": "Enum member value"
+              }
+             },
+             "required": [],
+             "additionalProperties": false
+            }
+           ],
+           "description": "Members to upsert"
+          },
+          "bitfield": {
+           "type": "boolean",
+           "description": "Bitfield enum"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "name": {
+          "type": "string",
+          "description": "Enum type name"
+         },
+         "members": {
+          "anyOf": [
+           {
+            "type": "array",
+            "items": {
+             "type": "object",
+             "properties": {
+              "name": {
+               "type": "string",
+               "description": "Enum member name"
+              },
+              "value": {
+               "anyOf": [
+                {
+                 "type": "integer"
+                },
+                {
+                 "type": "string"
+                }
+               ],
+               "description": "Enum member value"
+              }
+             },
+             "required": [],
+             "additionalProperties": false
+            }
+           },
+           {
+            "type": "object",
+            "properties": {
+             "name": {
+              "type": "string",
+              "description": "Enum member name"
+             },
+             "value": {
+              "anyOf": [
+               {
+                "type": "integer"
+               },
+               {
+                "type": "string"
+               }
+              ],
+              "description": "Enum member value"
+             }
+            },
+            "required": [],
+            "additionalProperties": false
+           }
+          ],
+          "description": "Members to upsert"
+         },
+         "bitfield": {
+          "type": "boolean",
+          "description": "Bitfield enum"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Create enums if missing and upsert enum members without destructive replacement"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "read_struct",
+   "description": "Read struct fields from memory at address; auto-detect type when possible.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address"
+          },
+          "struct": {
+           "type": "string",
+           "description": "Struct name (auto-detect if omitted)"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address"
+         },
+         "struct": {
+          "type": "string",
+          "description": "Struct name (auto-detect if omitted)"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "search_structs",
+   "description": "Search local structs/unions by name pattern.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "filter": {
+      "type": "string",
+      "description": "Case-insensitive substring to search for in structure names"
+     }
+    },
+    "required": [
+     "filter"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "type_query",
+   "description": "Query local types with structured filters/projection-friendly output.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "filter": {
+           "type": "string",
+           "description": "Name glob/regex"
+          },
+          "kind": {
+           "type": "string",
+           "description": "any|struct|union|enum|typedef|func|ptr|udt"
+          },
+          "offset": {
+           "type": "integer",
+           "description": "Start index"
+          },
+          "count": {
+           "type": "integer",
+           "description": "Max results (0=all)"
+          },
+          "sort_by": {
+           "type": "string",
+           "description": "Sort: name|size|ordinal"
+          },
+          "descending": {
+           "type": "boolean",
+           "description": "Descending"
+          },
+          "include_decl": {
+           "type": "boolean",
+           "description": "Include declaration text"
+          },
+          "include_members": {
+           "type": "boolean",
+           "description": "Include UDT member details"
+          },
+          "max_members": {
+           "type": "integer",
+           "description": "Max members per UDT"
+          },
+          "include_relationships": {
+           "type": "boolean",
+           "description": "Include related type names"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "filter": {
+          "type": "string",
+          "description": "Name glob/regex"
+         },
+         "kind": {
+          "type": "string",
+          "description": "any|struct|union|enum|typedef|func|ptr|udt"
+         },
+         "offset": {
+          "type": "integer",
+          "description": "Start index"
+         },
+         "count": {
+          "type": "integer",
+          "description": "Max results (0=all)"
+         },
+         "sort_by": {
+          "type": "string",
+          "description": "Sort: name|size|ordinal"
+         },
+         "descending": {
+          "type": "boolean",
+          "description": "Descending"
+         },
+         "include_decl": {
+          "type": "boolean",
+          "description": "Include declaration text"
+         },
+         "include_members": {
+          "type": "boolean",
+          "description": "Include UDT member details"
+         },
+         "max_members": {
+          "type": "integer",
+          "description": "Max members per UDT"
+         },
+         "include_relationships": {
+          "type": "boolean",
+          "description": "Include related type names"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Type catalog query with filtering, pagination, and optional relationships"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "type_inspect",
+   "description": "Inspect named types (size/kind/declaration/members).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "queries": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "name": {
+           "type": "string",
+           "description": "Type name"
+          },
+          "include_members": {
+           "type": "boolean",
+           "description": "Include UDT member details"
+          },
+          "max_members": {
+           "type": "integer",
+           "description": "Max members"
+          }
+         },
+         "required": [
+          "name"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "name": {
+          "type": "string",
+          "description": "Type name"
+         },
+         "include_members": {
+          "type": "boolean",
+          "description": "Include UDT member details"
+         },
+         "max_members": {
+          "type": "integer",
+          "description": "Max members"
+         }
+        },
+        "required": [
+         "name"
+        ],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Inspect named types and optionally include member layout"
+     }
+    },
+    "required": [
+     "queries"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "set_type",
+   "description": "Apply types (function/global/local/stack)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "edits": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address (function, global, or stack frame)"
+          },
+          "ty": {
+           "type": "string",
+           "description": "Type name or declaration"
+          },
+          "name": {
+           "type": "string",
+           "description": "Variable/function name"
+          },
+          "kind": {
+           "type": "string",
+           "description": "Entity kind (auto-detected)"
+          },
+          "signature": {
+           "type": "string",
+           "description": "Function signature"
+          },
+          "variable": {
+           "type": "string",
+           "description": "Local variable name"
+          }
+         },
+         "required": [
+          "addr"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address (function, global, or stack frame)"
+         },
+         "ty": {
+          "type": "string",
+          "description": "Type name or declaration"
+         },
+         "name": {
+          "type": "string",
+          "description": "Variable/function name"
+         },
+         "kind": {
+          "type": "string",
+          "description": "Entity kind (auto-detected)"
+         },
+         "signature": {
+          "type": "string",
+          "description": "Function signature"
+         },
+         "variable": {
+          "type": "string",
+          "description": "Local variable name"
+         }
+        },
+        "required": [
+         "addr"
+        ],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "edits"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "type_apply_batch",
+   "description": "Apply multiple type edits and return aggregate status.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "batch": {
+      "type": "object",
+      "properties": {
+       "edits": {
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "addr": {
+             "type": "string",
+             "description": "Address (function, global, or stack frame)"
+            },
+            "ty": {
+             "type": "string",
+             "description": "Type name or declaration"
+            },
+            "name": {
+             "type": "string",
+             "description": "Variable/function name"
+            },
+            "kind": {
+             "type": "string",
+             "description": "Entity kind (auto-detected)"
+            },
+            "signature": {
+             "type": "string",
+             "description": "Function signature"
+            },
+            "variable": {
+             "type": "string",
+             "description": "Local variable name"
+            }
+           },
+           "required": [
+            "addr"
+           ],
+           "additionalProperties": false
+          }
+         },
+         {
+          "type": "object",
+          "properties": {
+           "addr": {
+            "type": "string",
+            "description": "Address (function, global, or stack frame)"
+           },
+           "ty": {
+            "type": "string",
+            "description": "Type name or declaration"
+           },
+           "name": {
+            "type": "string",
+            "description": "Variable/function name"
+           },
+           "kind": {
+            "type": "string",
+            "description": "Entity kind (auto-detected)"
+           },
+           "signature": {
+            "type": "string",
+            "description": "Function signature"
+           },
+           "variable": {
+            "type": "string",
+            "description": "Local variable name"
+           }
+          },
+          "required": [
+           "addr"
+          ],
+          "additionalProperties": false
+         }
+        ],
+        "description": "Type edits to apply"
+       },
+       "stop_on_error": {
+        "type": "boolean",
+        "description": "Stop on first failure"
+       }
+      },
+      "required": [
+       "edits"
+      ],
+      "additionalProperties": false,
+      "description": "Batch type edits with optional stop_on_error behavior"
+     }
+    },
+    "required": [
+     "batch"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "infer_types",
+   "description": "Infer and apply likely types at target addresses.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addrs": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Addresses to infer types for"
+     }
+    },
+    "required": [
+     "addrs"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "add_bookmark",
+   "description": "Add or replace the IDA bookmark at an address. Set prefix=\"\" for no prefix.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addr": {
+      "type": "string",
+      "description": "Address to bookmark"
+     },
+     "name": {
+      "type": "string",
+      "description": "Bookmark label text after the prefix"
+     },
+     "prefix": {
+      "type": "string",
+      "description": "Optional title prefix. Defaults to 'idaMCP: '; pass '' for no prefix.",
+      "default": "idaMCP: "
+     }
+    },
+    "required": [
+     "addr",
+     "name"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "set_comments",
+   "description": "Set comments at addresses (both disassembly and decompiler views)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address (hex or decimal)"
+          },
+          "comment": {
+           "type": "string",
+           "description": "Comment text"
+          }
+         },
+         "required": [
+          "addr",
+          "comment"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address (hex or decimal)"
+         },
+         "comment": {
+          "type": "string",
+          "description": "Comment text"
+         }
+        },
+        "required": [
+         "addr",
+         "comment"
+        ],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "items"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "append_comments",
+   "description": "Append comments at addresses, deduping exact text by default.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address (hex or decimal)"
+          },
+          "comment": {
+           "type": "string",
+           "description": "Comment text to append"
+          },
+          "scope": {
+           "type": "string",
+           "description": "auto|func|line (default: auto)"
+          },
+          "dedupe": {
+           "type": "boolean",
+           "description": "Skip if exact text already exists (default: true)"
+          }
+         },
+         "required": [
+          "addr",
+          "comment"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address (hex or decimal)"
+         },
+         "comment": {
+          "type": "string",
+          "description": "Comment text to append"
+         },
+         "scope": {
+          "type": "string",
+          "description": "auto|func|line (default: auto)"
+         },
+         "dedupe": {
+          "type": "boolean",
+          "description": "Skip if exact text already exists (default: true)"
+         }
+        },
+        "required": [
+         "addr",
+         "comment"
+        ],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "items"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "patch_asm",
+   "description": "Patch assembly instructions at addresses",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address (hex or decimal)"
+          },
+          "asm": {
+           "type": "string",
+           "description": "Assembly instruction(s), semicolon-separated"
+          }
+         },
+         "required": [
+          "addr",
+          "asm"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address (hex or decimal)"
+         },
+         "asm": {
+          "type": "string",
+          "description": "Assembly instruction(s), semicolon-separated"
+         }
+        },
+        "required": [
+         "addr",
+         "asm"
+        ],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "items"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "rename",
+   "description": "Batch-rename funcs/globals/locals/stack vars with dry-run options.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "batch": {
+      "type": "object",
+      "properties": {
+       "func": {
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "addr": {
+             "type": "string",
+             "description": "Function address (hex or decimal)"
+            },
+            "name": {
+             "type": "string",
+             "description": "New function name"
+            }
+           },
+           "required": [
+            "addr",
+            "name"
+           ],
+           "additionalProperties": false
+          }
+         },
+         {
+          "type": "object",
+          "properties": {
+           "addr": {
+            "type": "string",
+            "description": "Function address (hex or decimal)"
+           },
+           "name": {
+            "type": "string",
+            "description": "New function name"
+           }
+          },
+          "required": [
+           "addr",
+           "name"
+          ],
+          "additionalProperties": false
+         }
+        ],
+        "description": "Function rename operations"
+       },
+       "data": {
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "old": {
+             "type": "string",
+             "description": "Current variable name"
+            },
+            "new": {
+             "type": "string",
+             "description": "New variable name"
+            }
+           },
+           "required": [
+            "old",
+            "new"
+           ],
+           "additionalProperties": false
+          }
+         },
+         {
+          "type": "object",
+          "properties": {
+           "old": {
+            "type": "string",
+            "description": "Current variable name"
+           },
+           "new": {
+            "type": "string",
+            "description": "New variable name"
+           }
+          },
+          "required": [
+           "old",
+           "new"
+          ],
+          "additionalProperties": false
+         }
+        ],
+        "description": "Global/data variable rename operations"
+       },
+       "local": {
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "func_addr": {
+             "type": "string",
+             "description": "Function address"
+            },
+            "old": {
+             "type": "string",
+             "description": "Current variable name"
+            },
+            "new": {
+             "type": "string",
+             "description": "New variable name"
+            }
+           },
+           "required": [
+            "func_addr",
+            "old",
+            "new"
+           ],
+           "additionalProperties": false
+          }
+         },
+         {
+          "type": "object",
+          "properties": {
+           "func_addr": {
+            "type": "string",
+            "description": "Function address"
+           },
+           "old": {
+            "type": "string",
+            "description": "Current variable name"
+           },
+           "new": {
+            "type": "string",
+            "description": "New variable name"
+           }
+          },
+          "required": [
+           "func_addr",
+           "old",
+           "new"
+          ],
+          "additionalProperties": false
+         }
+        ],
+        "description": "Local variable rename operations"
+       },
+       "stack": {
+        "anyOf": [
+         {
+          "type": "array",
+          "items": {
+           "type": "object",
+           "properties": {
+            "func_addr": {
+             "type": "string",
+             "description": "Function address"
+            },
+            "old": {
+             "type": "string",
+             "description": "Current variable name"
+            },
+            "new": {
+             "type": "string",
+             "description": "New variable name"
+            }
+           },
+           "required": [
+            "func_addr",
+            "old",
+            "new"
+           ],
+           "additionalProperties": false
+          }
+         },
+         {
+          "type": "object",
+          "properties": {
+           "func_addr": {
+            "type": "string",
+            "description": "Function address"
+           },
+           "old": {
+            "type": "string",
+            "description": "Current variable name"
+           },
+           "new": {
+            "type": "string",
+            "description": "New variable name"
+           }
+          },
+          "required": [
+           "func_addr",
+           "old",
+           "new"
+          ],
+          "additionalProperties": false
+         }
+        ],
+        "description": "Stack variable rename operations"
+       },
+       "stop_on_error": {
+        "type": "boolean",
+        "description": "Stop on first failure"
+       },
+       "dry_run": {
+        "type": "boolean",
+        "description": "Validate only, no changes"
+       },
+       "allow_overwrite": {
+        "type": "boolean",
+        "description": "Force overwrite existing names"
+       }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "description": "Rename batch with func/data/local/stack fields (at least one required)"
+     }
+    },
+    "required": [
+     "batch"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "define_func",
+   "description": "Define functions; IDA infers bounds unless end is provided.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address to define (hex or decimal). Use 'start:end' for explicit bounds."
+          },
+          "end": {
+           "type": "string",
+           "description": "Optional end address for explicit bounds"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address to define (hex or decimal). Use 'start:end' for explicit bounds."
+         },
+         "end": {
+          "type": "string",
+          "description": "Optional end address for explicit bounds"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "items"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "define_code",
+   "description": "Convert bytes to code instruction(s) at address(es).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address to define (hex or decimal). Use 'start:end' for explicit bounds."
+          },
+          "end": {
+           "type": "string",
+           "description": "Optional end address for explicit bounds"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address to define (hex or decimal). Use 'start:end' for explicit bounds."
+         },
+         "end": {
+          "type": "string",
+          "description": "Optional end address for explicit bounds"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "items"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "undefine",
+   "description": "Undefine item(s) at address(es), converting back to raw bytes.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Address to undefine (hex or decimal)"
+          },
+          "end": {
+           "type": "string",
+           "description": "Optional end address"
+          },
+          "size": {
+           "type": "integer",
+           "description": "Optional size in bytes"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Address to undefine (hex or decimal)"
+         },
+         "end": {
+          "type": "string",
+          "description": "Optional end address"
+         },
+         "size": {
+          "type": "integer",
+          "description": "Optional size in bytes"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "items"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "force_recompile",
+   "description": "Invalidate the Hex-Rays decompile cache for one or more functions.\n\nUse after `set_type`, `rename` (especially of locals), `set_op_type`, or\n`make_data` so the next `decompile` call regenerates fresh pseudocode\ninstead of returning a cached, stale view.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ],
+      "description": "List of {addr: function-entry-EA} ops, or a single op. Omit / pass empty list to recompile every function.",
+      "default": null
+     }
+    },
+    "required": []
+   }
+  },
+  {
+   "server": "ida",
+   "name": "set_op_type",
+   "description": "Set the type of an instruction operand. GUI 'Y' / 'O' / '#' equivalent.\n\nTags an operand at a specific instruction with a desired interpretation.\nUseful when the decompiler picks an awkward expression form (e.g., the\n\"earlier-named-symbol + offset\" form for contiguous globals).\n\n`kind` values:\n- `\"stroff\"`: struct-offset reference. Requires `struct`, optional `delta`.\n- `\"offset\"`: absolute offset / pointer. Optional `target_addr`.\n- `\"hex\" | \"dec\" | \"char\" | \"binary\" | \"octal\"`: numeric format.\n- `\"stkvar\"`: stack-variable reference (function-local).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string"
+          },
+          "op_n": {
+           "type": "integer"
+          },
+          "kind": {
+           "type": "string"
+          },
+          "struct": {
+           "type": "string"
+          },
+          "delta": {
+           "type": "integer"
+          },
+          "target_addr": {
+           "type": "string"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string"
+         },
+         "op_n": {
+          "type": "integer"
+         },
+         "kind": {
+          "type": "string"
+         },
+         "struct": {
+          "type": "string"
+         },
+         "delta": {
+          "type": "integer"
+         },
+         "target_addr": {
+          "type": "string"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Operand-typing ops. Equivalent to GUI 'Y' (struct offset) or 'O' (offset) operations."
+     }
+    },
+    "required": [
+     "items"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "make_data",
+   "description": "Create a typed data symbol at an address, replacing any prior items.\n\nUse this to harden a symbol boundary that the decompiler is currently\nexpressing through a neighboring global plus offset. `set_type` alone\nleaves the underlying byte items unchanged; this tool deletes them\nfirst, then re-creates them at the right size with the right type, then\noptionally renames.\n\nThe `type` field is a full C declaration with a placeholder name, e.g.\n`\"ISP_SNS_STATE_S * g_pastImx290[4]\"` — IDA parses it via SetType.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string"
+          },
+          "type": {
+           "type": "string"
+          },
+          "name": {
+           "type": "string"
+          },
+          "delete_existing": {
+           "type": "boolean"
+          }
+         },
+         "required": [],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string"
+         },
+         "type": {
+          "type": "string"
+         },
+         "name": {
+          "type": "string"
+         },
+         "delete_existing": {
+          "type": "boolean"
+         }
+        },
+        "required": [],
+        "additionalProperties": false
+       }
+      ],
+      "description": "Data-creation ops. Each {addr, type, name?} replaces existing data items at addr with a fresh symbol of the given type."
+     }
+    },
+    "required": [
+     "items"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "stack_frame",
+   "description": "Return stack variables for function address(es).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addrs": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Address(es)"
+     }
+    },
+    "required": [
+     "addrs"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "declare_stack",
+   "description": "Create stack variables from typed stack declarations.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Function address"
+          },
+          "offset": {
+           "type": "string",
+           "description": "Stack offset"
+          },
+          "name": {
+           "type": "string",
+           "description": "Variable name"
+          },
+          "ty": {
+           "type": "string",
+           "description": "Type name"
+          }
+         },
+         "required": [
+          "addr",
+          "offset",
+          "name",
+          "ty"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Function address"
+         },
+         "offset": {
+          "type": "string",
+          "description": "Stack offset"
+         },
+         "name": {
+          "type": "string",
+          "description": "Variable name"
+         },
+         "ty": {
+          "type": "string",
+          "description": "Type name"
+         }
+        },
+        "required": [
+         "addr",
+         "offset",
+         "name",
+         "ty"
+        ],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "items"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "delete_stack",
+   "description": "Delete stack variables by name or offset.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "object",
+         "properties": {
+          "addr": {
+           "type": "string",
+           "description": "Function address"
+          },
+          "name": {
+           "type": "string",
+           "description": "Variable name"
+          }
+         },
+         "required": [
+          "addr",
+          "name"
+         ],
+         "additionalProperties": false
+        }
+       },
+       {
+        "type": "object",
+        "properties": {
+         "addr": {
+          "type": "string",
+          "description": "Function address"
+         },
+         "name": {
+          "type": "string",
+          "description": "Variable name"
+         }
+        },
+        "required": [
+         "addr",
+         "name"
+        ],
+        "additionalProperties": false
+       }
+      ]
+     }
+    },
+    "required": [
+     "items"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "py_eval",
+   "description": "Execute Python in IDA context and return result/stdout/stderr.\n\nLocals persistence (Jupyter-style): the locals namespace persists across\ncalls by default, so variables, imports, and definitions from previous\ncalls stay visible. Pass new_locals=True to reset the stored namespace\nand start fresh.\n\nNote: the globals namespace (IDA modules and helpers) is always rebuilt\nper call; only locals persist. Jupyter-style last-expression return:\nif the code ends with an expression, its value is returned in \"result\".",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "string",
+      "description": "Python code"
+     },
+     "new_locals": {
+      "type": "boolean",
+      "description": "False (default): reuse the locals namespace from previous py_eval calls, so variables assigned earlier remain visible (Jupyter-like persistence). True: reset and start with a fresh locals namespace.",
+      "default": false
+     }
+    },
+    "required": [
+     "code"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "py_exec_file",
+   "description": "Execute a Python script file in IDA context and return stdout/stderr.\n\nUnlike py_eval, this runs the entire file with exec() using a single shared\nglobals dict (no locals split), so top-level definitions are visible to all\ncode in the script. Handles large scripts that would be unwieldy as inline code.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "file_path": {
+      "type": "string",
+      "description": "Absolute path to a Python script to execute"
+     }
+    },
+    "required": [
+     "file_path"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "survey_binary",
+   "description": "Get a compact overview of the binary in one call. Returns file metadata,\nsegment layout, entry points, statistics, top 15 strings and functions ranked\nby xref count (functions include classification: thunk/wrapper/leaf/dispatcher/\ncomplex), imports by category, and call graph summary. Use this as your FIRST\ntool call when starting analysis. Do not call list_funcs, imports, or find_regex\nseparately for triage — this returns all of that. Use detail_level='minimal'\nfor binaries with >10k functions.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "detail_level": {
+      "type": "string",
+      "description": "Detail level: 'standard' or 'minimal'",
+      "default": "standard"
+     }
+    },
+    "required": []
+   }
+  },
+  {
+   "server": "ida",
+   "name": "analyze_function",
+   "description": "Compact single-function analysis: pseudocode, strings, constants, callers, callees, xrefs, blocks.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addr": {
+      "type": "string",
+      "description": "Function address or name"
+     },
+     "include_asm": {
+      "type": "boolean",
+      "description": "Include full disassembly (default: false, saves tokens)",
+      "default": false
+     }
+    },
+    "required": [
+     "addr"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "analyze_component",
+   "description": "Analyze related functions as a group: per-function summaries, internal call graph, shared data.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addrs": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Function addresses (comma-separated or list)"
+     }
+    },
+    "required": [
+     "addrs"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "diff_before_after",
+   "description": "Rename a function, set its type, or add a comment, and immediately see the\nbefore/after decompilation side by side. Use this instead of calling rename\nthen decompile separately when you want to verify that a rename or type change\nactually improved readability. Actions: 'rename_func' (action_args: {name: str}),\n'set_type' (action_args: {type: str}), 'set_comment' (action_args: {comment: str}).\nReturns {before, after, action_applied, changes_detected}. Especially useful\nduring batch renaming to confirm each change had the intended effect.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addr": {
+      "type": "string",
+      "description": "Function address"
+     },
+     "action": {
+      "type": "string",
+      "description": "Action: 'rename_func', 'set_type', 'set_comment'"
+     },
+     "action_args": {
+      "type": "object",
+      "description": "Arguments for the action"
+     }
+    },
+    "required": [
+     "addr",
+     "action",
+     "action_args"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "trace_data_flow",
+   "description": "Follow cross-references from or to an address, automatically traversing\nmultiple hops. Use 'forward' to see where data flows TO (xrefs-from), or\n'backward' to see where data flows FROM (xrefs-to). At each node in the\ntraversal, returns the function name, instruction, and whether it's code or\ndata. Use this when you find an interesting string, constant, or global and\nwant to understand every code path that touches it without manually chaining\nxrefs_to calls. Do not use for call graph traversal — use callgraph for that.\nmax_depth controls how many hops to follow (default 5, max 20).",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addr": {
+      "type": "string",
+      "description": "Starting address"
+     },
+     "direction": {
+      "type": "string",
+      "description": "'forward' (xrefs from) or 'backward' (xrefs to)",
+      "default": "forward"
+     },
+     "max_depth": {
+      "type": "integer",
+      "description": "Maximum traversal depth",
+      "default": 5
+     }
+    },
+    "required": [
+     "addr"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "make_signature",
+   "description": "Create unique byte signatures for addresses. Generates the shortest\nunique signature starting at each address by walking instructions and\nwildcarding operands. Useful for finding stable patterns that survive\nrecompilation.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addrs": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Address(es) or name(s) to create unique signatures for (e.g. '0x401000', 'main', or ['0x401000', 'sub_402000'])"
+     },
+     "format": {
+      "type": "string",
+      "description": "Output format: 'ida' (default), 'x64dbg', 'mask', or 'bitmask'",
+      "default": "ida"
+     },
+     "wildcard_operands": {
+      "type": "boolean",
+      "description": "Wildcard instruction operands for relocatable signatures (default: true)",
+      "default": true
+     },
+     "max_length": {
+      "type": "integer",
+      "description": "Maximum signature length in bytes before giving up (default: 1000)",
+      "default": 1000
+     }
+    },
+    "required": [
+     "addrs"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "make_signature_for_function",
+   "description": "Create unique byte signatures for function entry points. Resolves each\nname/address to a function, then generates the shortest unique signature\nstarting at the function start.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addrs": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Function address(es) or name(s) to create signatures for (e.g. 'main', '0x401000', or ['main', 'sub_402000'])"
+     },
+     "format": {
+      "type": "string",
+      "description": "Output format: 'ida' (default), 'x64dbg', 'mask', or 'bitmask'",
+      "default": "ida"
+     },
+     "wildcard_operands": {
+      "type": "boolean",
+      "description": "Wildcard instruction operands for relocatable signatures (default: true)",
+      "default": true
+     },
+     "max_length": {
+      "type": "integer",
+      "description": "Maximum signature length in bytes before giving up (default: 1000)",
+      "default": 1000
+     }
+    },
+    "required": [
+     "addrs"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "make_signature_for_range",
+   "description": "Create a byte signature for a specific address range (e.g. a selected\nregion). Unlike make_signature, this does NOT guarantee uniqueness — it\nsimply encodes the bytes in the range with optional operand wildcarding.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "start": {
+      "type": "string",
+      "description": "Start address or name (e.g. '0x401000')"
+     },
+     "end": {
+      "type": "string",
+      "description": "End address or name (exclusive, e.g. '0x401020')"
+     },
+     "format": {
+      "type": "string",
+      "description": "Output format: 'ida' (default), 'x64dbg', 'mask', or 'bitmask'",
+      "default": "ida"
+     },
+     "wildcard_operands": {
+      "type": "boolean",
+      "description": "Wildcard instruction operands for relocatable signatures (default: true)",
+      "default": true
+     }
+    },
+    "required": [
+     "start",
+     "end"
+    ]
+   }
+  },
+  {
+   "server": "ida",
+   "name": "find_xref_signatures",
+   "description": "Find signatures for code locations that reference an address. For each\ninput address, finds all code cross-references TO it, generates a unique\nsignature at each xref site, and returns the shortest ones. Ideal for\ncreating signatures for data addresses, vtable entries, or string\nreferences that can't be signatured directly.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "addrs": {
+      "anyOf": [
+       {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       {
+        "type": "string"
+       }
+      ],
+      "description": "Address(es) or name(s) to find XREF signatures for (e.g. a data address referenced by code)"
+     },
+     "format": {
+      "type": "string",
+      "description": "Output format: 'ida' (default), 'x64dbg', 'mask', or 'bitmask'",
+      "default": "ida"
+     },
+     "top": {
+      "type": "integer",
+      "description": "Number of shortest signatures to return per address (default: 5)",
+      "default": 5
+     },
+     "max_length": {
+      "type": "integer",
+      "description": "Maximum signature length in bytes (default: 250)",
+      "default": 250
+     }
+    },
+    "required": [
+     "addrs"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_canvas_delay",
+   "description": "Get animation frame delay in milliseconds",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the canvas",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_int",
+   "description": "Get an integer property value",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path",
+      "type": "string"
+     },
+     "defaultValue": {
+      "description": "Default value if not found",
+      "type": [
+       "integer",
+       "null"
+      ],
+      "default": null
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "import_png",
+   "description": "Import a PNG as a new canvas property",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "parentPath": {
+      "description": "Parent property path",
+      "type": "string"
+     },
+     "name": {
+      "description": "Name for the new canvas",
+      "type": "string"
+     },
+     "base64Png": {
+      "description": "Base64 encoded PNG data",
+      "type": "string"
+     },
+     "originX": {
+      "description": "Origin X (optional)",
+      "type": [
+       "integer",
+       "null"
+      ],
+      "default": null
+     },
+     "originY": {
+      "description": "Origin Y (optional)",
+      "type": [
+       "integer",
+       "null"
+      ],
+      "default": null
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "parentPath",
+     "name",
+     "base64Png"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "set_float",
+   "description": "Set a float property value",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path",
+      "type": "string"
+     },
+     "value": {
+      "description": "New float value",
+      "type": "number"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path",
+     "value"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_category_summary",
+   "description": "Get a summary of a specific category",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "export_mp3",
+   "description": "Export a sound property to MP3 file",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the sound",
+      "type": "string"
+     },
+     "outputPath": {
+      "description": "Output file path",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path",
+     "outputPath"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "find_broken_uols",
+   "description": "Find UOL references that don't resolve to valid targets",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category to search (optional - searches all if not specified)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "image": {
+      "description": "Specific image to search (optional)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "maxResults": {
+      "description": "Maximum results to return (default: 30)",
+      "type": "integer",
+      "default": 30
+     }
+    }
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "pack_to_wz",
+   "description": "Pack IMG filesystem back to WZ files",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "imgPath": {
+      "description": "Path to IMG filesystem directory",
+      "type": "string"
+     },
+     "outputDir": {
+      "description": "Output directory for WZ files",
+      "type": "string"
+     },
+     "wzVersion": {
+      "description": "WZ version to create",
+      "type": "integer",
+      "default": 83
+     },
+     "category": {
+      "description": "Category to pack (optional - packs all if not specified)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "versionKey": {
+      "description": "WZ encryption/version key (GMS, EMS, BMS, CLASSIC; empty uses manifest/default)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "saveAs64Bit": {
+      "description": "Save as 64-bit WZ format",
+      "type": "boolean",
+      "default": false
+     },
+     "separateCanvas": {
+      "description": "Separate canvas data for 64-bit WZ format",
+      "type": "boolean",
+      "default": false
+     }
+    },
+    "required": [
+     "imgPath",
+     "outputDir"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "validate_image",
+   "description": "Validate an image structure for common issues",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "list_sounds_in_image",
+   "description": "List all sound properties in an image",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "maxDepth": {
+      "description": "Maximum depth to search",
+      "type": "integer",
+      "default": 10
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "set_vector",
+   "description": "Set a vector property (X, Y)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path",
+      "type": "string"
+     },
+     "x": {
+      "description": "X value",
+      "type": "integer"
+     },
+     "y": {
+      "description": "Y value",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path",
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "batch_search",
+   "description": "Search across multiple categories",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pattern": {
+      "description": "Search pattern (supports wildcards)",
+      "type": "string"
+     },
+     "categories": {
+      "description": "Categories to search (comma-separated, or 'all')",
+      "type": "string",
+      "default": "all"
+     },
+     "searchType": {
+      "description": "Search type: name, value, or both",
+      "type": "string",
+      "default": "name"
+     },
+     "maxResults": {
+      "description": "Maximum results (default: 30)",
+      "type": "integer",
+      "default": 30
+     }
+    },
+    "required": [
+     "pattern"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_tree_structure",
+   "description": "Get hierarchical property tree structure. Use shallow depth for large trees.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path (empty for root)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "depth": {
+      "description": "Maximum depth to traverse (default: 2, max: 5)",
+      "type": "integer",
+      "default": 2
+     },
+     "maxChildrenPerNode": {
+      "description": "Maximum children per node (default: 50, max: 200)",
+      "type": "integer",
+      "default": 50
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "extract_to_img",
+   "description": "Extract WZ files to IMG filesystem format",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "wzPath": {
+      "description": "Path to WZ file or directory containing WZ files",
+      "type": "string"
+     },
+     "outputDir": {
+      "description": "Output directory for IMG filesystem",
+      "type": "string"
+     },
+     "versionKey": {
+      "description": "Version key for WZ decryption (empty for auto-detect)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "createManifest": {
+      "description": "Create version manifest",
+      "type": "boolean",
+      "default": true
+     },
+     "categories": {
+      "description": "Categories to extract (comma-separated, optional). For a single WZ file this is inferred from the file name.",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "versionId": {
+      "description": "Version id for the extracted IMG filesystem manifest",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "displayName": {
+      "description": "Display name for the extracted IMG filesystem manifest",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "resolveLinks": {
+      "description": "Resolve _inlink/_outlink canvas references during extraction",
+      "type": "boolean",
+      "default": false
+     }
+    },
+    "required": [
+     "wzPath",
+     "outputDir"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "scan_img_directories",
+   "description": "Scan a directory for available IMG filesystem data sources",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "path": {
+      "description": "Directory path to scan",
+      "type": "string"
+     },
+     "recursive": {
+      "description": "Scan subdirectories recursively (default: true)",
+      "type": "boolean",
+      "default": true
+     }
+    },
+    "required": [
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "export_all_sounds",
+   "description": "Export all sound properties from a path to MP3 files",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "outputDir": {
+      "description": "Output directory",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path (empty for entire image)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "maxDepth": {
+      "description": "Maximum depth to search",
+      "type": "integer",
+      "default": 10
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "outputDir"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "list_properties",
+   "description": "List child properties of a node in an image. Use compact=true for smaller responses.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name (e.g., 'Map.img' or '100000000.img')",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path within the image (empty for root)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "compact": {
+      "description": "Return compact format with just names and types (default: true)",
+      "type": "boolean",
+      "default": true
+     },
+     "offset": {
+      "description": "Offset for pagination (default: 0)",
+      "type": "integer",
+      "default": 0
+     },
+     "limit": {
+      "description": "Maximum properties to return (default: 50, max: 500)",
+      "type": "integer",
+      "default": 50
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_canvas_bitmap",
+   "description": "Get canvas image as PNG (base64 encoded)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the canvas",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "is_image_parsed",
+   "description": "Check if an image is currently parsed",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "delete_property",
+   "description": "Delete a property",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to delete",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "resolve_canvas_link",
+   "description": "Resolve _inlink or _outlink canvas references",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the canvas",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "batch_export_images",
+   "description": "Export all images from multiple categories",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "categories": {
+      "description": "Categories to export (comma-separated, or 'all')",
+      "type": "string"
+     },
+     "outputDir": {
+      "description": "Output directory",
+      "type": "string"
+     },
+     "format": {
+      "description": "Output format (png, jpg)",
+      "type": "string",
+      "default": "png"
+     },
+     "maxImages": {
+      "description": "Maximum images to export",
+      "type": "integer",
+      "default": 1000
+     }
+    },
+    "required": [
+     "categories",
+     "outputDir"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_sound_data",
+   "description": "Get raw audio data as base64",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the sound",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "rename_property",
+   "description": "Rename a property",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path",
+      "type": "string"
+     },
+     "newName": {
+      "description": "New name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path",
+     "newName"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_property",
+   "description": "Get a property with full metadata",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path within the image",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "search_by_name",
+   "description": "Search for properties by name pattern. Use compact=true for smaller responses.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "pattern": {
+      "description": "Search pattern (case-insensitive, supports * wildcards)",
+      "type": "string"
+     },
+     "category": {
+      "description": "Category to search in (optional, searches all if not specified)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "image": {
+      "description": "Specific image to search in (optional)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "maxResults": {
+      "description": "Maximum results to return (default: 20, max: 200)",
+      "type": "integer",
+      "default": 20
+     },
+     "compact": {
+      "description": "Return compact format with paths only (default: true)",
+      "type": "boolean",
+      "default": true
+     }
+    },
+    "required": [
+     "pattern"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "list_canvas_in_image",
+   "description": "List all canvas properties in an image",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "maxDepth": {
+      "description": "Maximum depth to search",
+      "type": "integer",
+      "default": 10
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "iterate_properties",
+   "description": "Iterate properties with pagination",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path (empty for root)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "offset": {
+      "description": "Offset to start from",
+      "type": "integer",
+      "default": 0
+     },
+     "limit": {
+      "description": "Maximum number of properties to return (default: 25)",
+      "type": "integer",
+      "default": 25
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "set_canvas_origin",
+   "description": "Set the origin point of a canvas",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the canvas",
+      "type": "string"
+     },
+     "x": {
+      "description": "X origin",
+      "type": "integer"
+     },
+     "y": {
+      "description": "Y origin",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path",
+     "x",
+     "y"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_canvas_head",
+   "description": "Get the canvas head position (used for character rendering)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the canvas",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "unparse_image",
+   "description": "Unparse an image (free memory)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_cache_stats",
+   "description": "Get cache statistics for the current data source",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_parsed_images",
+   "description": "List all currently parsed images",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "compare_properties",
+   "description": "Compare two property trees and find differences",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category1": {
+      "description": "First category",
+      "type": "string"
+     },
+     "image1": {
+      "description": "First image",
+      "type": "string"
+     },
+     "path1": {
+      "description": "First path",
+      "type": "string"
+     },
+     "category2": {
+      "description": "Second category",
+      "type": "string"
+     },
+     "image2": {
+      "description": "Second image",
+      "type": "string"
+     },
+     "path2": {
+      "description": "Second path",
+      "type": "string"
+     },
+     "maxDepth": {
+      "description": "Maximum depth to compare",
+      "type": "integer",
+      "default": 5
+     }
+    },
+    "required": [
+     "category1",
+     "image1",
+     "path1",
+     "category2",
+     "image2",
+     "path2"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_statistics",
+   "description": "Get overall statistics for the data source",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_version_info",
+   "description": "Get version information for the current data source",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_animation_frames",
+   "description": "Get animation frames with metadata. Use metadataOnly=true to skip image data and reduce response size. Use offset/limit for pagination.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the animation container",
+      "type": "string"
+     },
+     "metadataOnly": {
+      "description": "Only return metadata without Base64 image data (default: true for smaller responses)",
+      "type": "boolean",
+      "default": true
+     },
+     "offset": {
+      "description": "Frame offset for pagination (default: 0)",
+      "type": "integer",
+      "default": 0
+     },
+     "limit": {
+      "description": "Maximum frames to return (default: 5, max: 50)",
+      "type": "integer",
+      "default": 5
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_properties_batch",
+   "description": "Get multiple properties in a single request",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "requests": {
+      "description": "Array of property requests, each with category, image, and path",
+      "type": "array",
+      "items": {
+       "type": "object",
+       "properties": {
+        "category": {
+         "type": "string"
+        },
+        "image": {
+         "type": "string"
+        },
+        "path": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "category",
+        "image",
+        "path"
+       ]
+      }
+     }
+    },
+    "required": [
+     "requests"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_property_path",
+   "description": "Get the full path of a property",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path within the image",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "set_canvas_bitmap",
+   "description": "Replace a canvas image with a new PNG",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the canvas",
+      "type": "string"
+     },
+     "base64Png": {
+      "description": "Base64 encoded PNG data",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path",
+     "base64Png"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_children",
+   "description": "Get child properties of a node with pagination. Use compact=true for smaller responses.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path (empty for root)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "compact": {
+      "description": "Return compact format (default: true)",
+      "type": "boolean",
+      "default": true
+     },
+     "offset": {
+      "description": "Offset for pagination (default: 0)",
+      "type": "integer",
+      "default": 0
+     },
+     "limit": {
+      "description": "Maximum children to return (default: 50, max: 500)",
+      "type": "integer",
+      "default": 50
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_subdirectories",
+   "description": "List subdirectories within a category",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name (e.g., 'Map', 'Mob')",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "parse_image",
+   "description": "Parse an image (load properties into memory)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "export_all_images",
+   "description": "Export all canvas properties from a path to PNG files",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "outputDir": {
+      "description": "Output directory",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path (empty for entire image)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "maxDepth": {
+      "description": "Maximum depth to search",
+      "type": "integer",
+      "default": 10
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "outputDir"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "import_sound",
+   "description": "Import audio data as a new sound property",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "parentPath": {
+      "description": "Parent property path",
+      "type": "string"
+     },
+     "name": {
+      "description": "Name for the new sound",
+      "type": "string"
+     },
+     "base64Audio": {
+      "description": "Base64 encoded MP3 data",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "parentPath",
+     "name",
+     "base64Audio"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_string",
+   "description": "Get a string property value",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path",
+      "type": "string"
+     },
+     "defaultValue": {
+      "description": "Default value if not found",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_canvas_info",
+   "description": "Get canvas metadata without the actual image data",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the canvas",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "list_images_in_category",
+   "description": "List all .img files in a category",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name (e.g., 'Map', 'Mob', 'Npc')",
+      "type": "string"
+     },
+     "subdirectory": {
+      "description": "Subdirectory within the category (optional)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     }
+    },
+    "required": [
+     "category"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "unload_category",
+   "description": "Unload all images in a category (free memory)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_property_value",
+   "description": "Get just the value of a property",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "discard_changes",
+   "description": "Discard unsaved changes to an image",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "preload_category",
+   "description": "Preload all images in a category",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "copy_property",
+   "description": "Deep copy a property to another location",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "srcCategory": {
+      "description": "Source category",
+      "type": "string"
+     },
+     "srcImage": {
+      "description": "Source image",
+      "type": "string"
+     },
+     "srcPath": {
+      "description": "Source property path",
+      "type": "string"
+     },
+     "destCategory": {
+      "description": "Destination category",
+      "type": "string"
+     },
+     "destImage": {
+      "description": "Destination image",
+      "type": "string"
+     },
+     "destParentPath": {
+      "description": "Destination parent path",
+      "type": "string"
+     },
+     "newName": {
+      "description": "New property name (optional, uses source name if not specified)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     }
+    },
+    "required": [
+     "srcCategory",
+     "srcImage",
+     "srcPath",
+     "destCategory",
+     "destImage",
+     "destParentPath"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "set_string",
+   "description": "Set a string property value",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path",
+      "type": "string"
+     },
+     "value": {
+      "description": "New string value",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path",
+     "value"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_sound_info",
+   "description": "Get sound/audio metadata",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the sound",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "resolve_sound_link",
+   "description": "Resolve UOL link to actual sound property",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the UOL or sound",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "add_property",
+   "description": "Add a new property to a parent",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "parentPath": {
+      "description": "Parent property path (empty for image root)",
+      "type": "string"
+     },
+     "name": {
+      "description": "Name of the new property",
+      "type": "string"
+     },
+     "type": {
+      "description": "Property type (String, Int, Short, Long, Float, Double, Vector, SubProperty, Null)",
+      "type": "string"
+     },
+     "value": {
+      "description": "Initial value (optional, depends on type)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "parentPath",
+     "name",
+     "type"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "export_png",
+   "description": "Export a canvas property to PNG file",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the canvas",
+      "type": "string"
+     },
+     "outputPath": {
+      "description": "Output file path",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path",
+     "outputPath"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_canvas_bounds",
+   "description": "Get the canvas bounds (lt - left-top position)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the canvas",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_vector",
+   "description": "Get a vector property (X, Y)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "save_image",
+   "description": "Save changes to an image to disk",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "init_data_source",
+   "description": "Initialize an IMG filesystem data source from a directory path",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "basePath": {
+      "description": "Path to the extracted IMG filesystem directory (containing manifest.json)",
+      "type": "string"
+     }
+    },
+    "required": [
+     "basePath"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_canvas_origin",
+   "description": "Get the canvas origin point (draw offset)",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path to the canvas",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "list_categories",
+   "description": "List all available categories in the current data source",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_float",
+   "description": "Get a float property value",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path",
+      "type": "string"
+     },
+     "defaultValue": {
+      "description": "Default value if not found",
+      "type": [
+       "number",
+       "null"
+      ],
+      "default": null
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_property_count",
+   "description": "Count child properties of a node",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path (empty for root)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "resolve_uol",
+   "description": "Resolve a UOL (link) property to its target",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path",
+      "type": "string"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "set_int",
+   "description": "Set an integer property value",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path",
+      "type": "string"
+     },
+     "value": {
+      "description": "New integer value",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "category",
+     "image",
+     "path",
+     "value"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "export_to_md",
+   "description": "Export a property tree to Markdown format. For large exports, outputPath is required. Max inline response is 100KB.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "category": {
+      "description": "Category name",
+      "type": "string"
+     },
+     "image": {
+      "description": "Image name",
+      "type": "string"
+     },
+     "path": {
+      "description": "Property path (empty for entire image)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "maxDepth": {
+      "description": "Maximum depth to export (default: 5, max: 10)",
+      "type": "integer",
+      "default": 5
+     },
+     "outputPath": {
+      "description": "Output file path (REQUIRED for exports > 100KB)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     }
+    },
+    "required": [
+     "category",
+     "image"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "search_by_value",
+   "description": "Search for properties by value. Use compact=true for smaller responses.",
+   "inputSchema": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "description": "Value to search for (string representation)",
+      "type": "string"
+     },
+     "type": {
+      "description": "Property type to filter (optional: String, Int, Float, etc.)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "category": {
+      "description": "Category to search in (optional)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "image": {
+      "description": "Specific image to search in (optional)",
+      "type": [
+       "string",
+       "null"
+      ],
+      "default": null
+     },
+     "maxResults": {
+      "description": "Maximum results to return (default: 20, max: 200)",
+      "type": "integer",
+      "default": 20
+     },
+     "compact": {
+      "description": "Return compact format with paths only (default: true)",
+      "type": "boolean",
+      "default": true
+     }
+    },
+    "required": [
+     "value"
+    ]
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "clear_cache",
+   "description": "Clear the loaded image cache",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  },
+  {
+   "server": "wzimg",
+   "name": "get_data_source_info",
+   "description": "Get information about the currently loaded data source",
+   "inputSchema": {
+    "type": "object",
+    "properties": {}
+   }
+  }
+ ]
+}
