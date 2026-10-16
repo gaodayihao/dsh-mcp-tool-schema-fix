@@ -6,12 +6,12 @@
 
 PTC 模式下调 MCP 工具，agent 常常要试两次才调对：
 
-`@jsonc
+```jsonc
 // 第一次：猜的
 { "pattern": "PlayerRuntime" }            // -> Error: An error occurred invoking 'FindSymbols'.
 // 第二次：才知道真名
 { "symbolName": "BuffApply" }
-`@
+```
 
 原因不是 agent 笨，是**参数名根本没进提示**：
 
@@ -29,11 +29,11 @@ MCP 工具一律经 `ctx.tools.register(definition)` 注册（`dsh-mcp-client` �
 | 输入形态 | 处理 | 结果 |
 |---|---|---|
 | `"type": ["string","null"]` | 改写成 `oneOf: [{type:"string"},{type:"null"}]` | 渲染成 `string \| null`，参数名与可空性都保住 |
-| `anyOf` / `allOf` / `not` / `\$ref` / `if`…`else` / `dependentSchemas` | 删关键字 | 参数仍在，类型退化为 `JsonValue` |
+| `anyOf` / `allOf` / `not` / `$ref` / `if`…`else` / `dependentSchemas` | 删关键字 | 参数仍在，类型退化为 `JsonValue` |
 | 值级约束 `format` / `pattern` / `minimum` / `maxLength` / `uniqueItems` / `patternProperties` … | 删关键字 | 只丢 Harness 表达不了的校验强度 |
 | 非布尔 `additionalProperties` | 删 | 缺省 = 开放，同效 |
 | 悬空 `required`、缺 type/oneOf 时的孤儿兄弟关键字 | 删 | 否则整份 schema 被 Reject |
-| 纯元信息 `\$schema` / `\$id` / `\$defs` … | 删 | 不改语义 |
+| 纯元信息 `$schema` / `$id` / `$defs` … | 删 | 不改语义 |
 
 **安全口径：只放宽、绝不收紧。**
 
@@ -55,7 +55,7 @@ MCP 工具一律经 `ctx.tools.register(definition)` 注册（`dsh-mcp-client` �
 
 `FindSymbols` 修前 / 修后：
 
-`@ts
+```ts
 unknown                                   // 修前
 
 {                                         // 修后
@@ -63,25 +63,27 @@ unknown                                   // 修前
   symbolKind?: string | null;
   pathFormat?: string; outputFormat?: string; limit?: number; offset?: number;
 } & Record<string, JsonValue>
-`@
+```
 
 本仓 `test/fixtures/tool-schemas.json` 存了这 179 个真实 schema，`npm test` 每次都会重跑契约断言。
 
 ## 安装（GitHub）
 
-`@bash
+```bash
 # 1) 把依赖装进目标 profile（pnpm 直连 GitHub）
-dsh plugin --profile desktop add github:<you>/dsh-mcp-tool-schema-fix
+dsh plugin --profile desktop add github:gaodayihao/dsh-mcp-tool-schema-fix
 
 # 2) 让 profile 加载它的 bundle patch：把 "dsh-mcp-tool-schema-fix" 追加进该 profile
 #    package.json 的 dsh.profile.bundles，或在桌面应用的 Plugin Manager 里启用
 #    （plugin_manager 的 install_bundle 会同时做这两步）。
 
 # 3) 重启 DSH —— profile 层在启动时挂载，改完必须重启。
-`@
+```
 
 > `desktop` profile 由桌面应用独占，`dsh --profile desktop` 不能 boot/dump 它；
 > `dsh plugin add` 只加依赖，**不会**自动进 `dsh.profile.bundles`。
+>
+> 若被 pnpm 的供应链策略拦住（`ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION`；24 小时窗口是 DSH 自带 pnpm 11 的默认值，非本插件引入）：非 strict 模式下 pnpm 会自动把该版本写进 profile 的 `pnpm-workspace.yaml` 的 `minimumReleaseAgeExclude`；也可一次性放行 —— `dsh plugin --profile desktop add <pkg> --config.minimumReleaseAge=0`。本插件是 git 依赖、无 registry 依赖，本身不触发该策略。
 
 ## 验证已生效
 
@@ -95,12 +97,12 @@ dsh plugin --profile desktop add github:<you>/dsh-mcp-tool-schema-fix
 
 ## 开发
 
-`@bash
+```bash
 npm test    # 9 个契约测试，不需要 DSH，也不需要 MCP 服务
 
 # 可选：用 DSH 自己的校验器 / 渲染器复核（需要 MCP 服务在跑）
 DSH_MODULES=<含 @deepseek-ai/dsh-tools 的 node_modules 目录> node tools/live-verify.mjs
-`@
+```
 
 `DSH_MODULES` 可以是任意一份含 `node_modules/@deepseek-ai/dsh-tools` 的目录：DSH 源码 checkout 的
 `node_modules`，或从 `app.asar` 解出来的依赖树。
